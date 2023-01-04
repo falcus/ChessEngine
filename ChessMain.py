@@ -26,11 +26,34 @@ def main():
     gs = ChessEngine.GameState()
     loadImages()
     running = True
+    sqSelected = () #no square selected initially. Keeps track of the last click of the user (tuple: (row,col))
+    playerClicks = [] # keep track of player clicks (two tuples: [(6,4), (4,4)])
+
     while running:
         # if we have a Quit event then the while loop will stop
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos() # x,y location of mouse
+                col = location[0]//SQ_SIZE
+                row = location[1]//SQ_SIZE
+                if sqSelected == (row,col): # the user clicked the square twice
+                    sqSelected = () # deselect
+                    playerClicks = [] # clear player clicks
+                
+                else:
+                    sqSelected = (row,col)
+                    playerClicks.append(sqSelected) # appends for both first and second clicks
+                # now if it was the users second click we need to do smt
+                if len(playerClicks) == 2: # after second click
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(move.getChessNotation)
+                    gs.makeMove(move)
+                    sqSelected = () #clears sqSelected and playerClicks to allow user to make more that one move. 
+                    playerClicks = []
+
+
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()

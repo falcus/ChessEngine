@@ -16,9 +16,11 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
     
+    # takes a move as a parameter and executes it.
     def makeMove(self, move):
         #now we make the actual move. So we'll just be reassigning the values 
         # taking the piece from starting position to end position
+        # this won't really work for castleing or en passant
         
         self.board[move.startRow][move.startCol] = '--'
         self.board[move.endRow][move.endCol] = move.pieceMoved
@@ -36,11 +38,11 @@ class Move():
     ranksToRows = {"1": 7, "2" : 6, "3" : 5, "4" : 4,
                     "5" : 3, "6" : 2, "7" : 1, "8" : 0}
     #the fww just reverses the dictionary
+    rowsToRanks = {v: k for k, v in ranksToRows.items()}
 
-    rowsToRanks = {v:k for k, v in ranksToRows.items()}
     filesToCols = {"a": 0, "b" : 1, "c" : 2, "d" : 3, 
                     "e" : 4, "f" : 5, "g" : 6, "h" : 7}
-    colsToFiles = { v : k for k, v in filesToCols.items()}
+    colsToFiles = { v: k for k, v in filesToCols.items()}
 
 
     def __init__(self, startSq, endSq, board):
